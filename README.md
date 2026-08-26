@@ -21,6 +21,14 @@ Any static file server works as long as it maps a directory request to its `inde
 npx serve site
 ```
 
+## Deployment
+
+`vercel.json` serves `site/` as the deployment root, so the clone's root-relative URLs resolve.
+It also sets `X-Robots-Tag: noindex, nofollow` on every response: this is a byte-level copy of a
+live business's site, and letting search engines index it would put a duplicate of Our Agency's
+pages and branding into results under someone else's domain. Remove that header block if the
+deployment is ever meant to be indexed.
+
 ## What is in `site/`
 
 | Path | Contents |
