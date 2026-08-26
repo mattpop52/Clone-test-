@@ -57,8 +57,13 @@ scroll animations and the rest of the theme behave as they do in production.
   Instagram, Vimeo and Google Maps — were left absolute and still point at the internet.
 - **Server-side features do not work.** The contact form, search, and the Cloudflare Turnstile
   widget need the live WordPress backend; they render but submit nowhere.
-- One asset is absent: `wp-content/uploads/complianz/css/banner-{banner_id}-{type}.css`. That is
-  an unexpanded WordPress template placeholder which 404s on the live site too.
+- **The Complianz cookie banner is removed.** Its markup ships in the HTML, but the stylesheet
+  that makes it a small corner popup is generated per banner by WordPress
+  (`wp-content/uploads/complianz/css/banner-1-optin.css`) and is only ever referenced through a
+  `banner-{banner_id}-{type}.css` template that the plugin fills in at runtime — so no literal URL
+  pointed at it and it was never captured. Unstyled, it rendered as a full-width block. With the
+  tracking scripts stripped there is also nothing left for it to gate, so `build.js` drops the
+  banner, its "manage consent" tab and its config script.
 
 ## How it was captured
 
