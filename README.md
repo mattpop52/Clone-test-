@@ -57,13 +57,14 @@ scroll animations and the rest of the theme behave as they do in production.
   Instagram, Vimeo and Google Maps — were left absolute and still point at the internet.
 - **Server-side features do not work.** The contact form, search, and the Cloudflare Turnstile
   widget need the live WordPress backend; they render but submit nowhere.
-- **The Complianz cookie banner is removed.** Its markup ships in the HTML, but the stylesheet
-  that makes it a small corner popup is generated per banner by WordPress
-  (`wp-content/uploads/complianz/css/banner-1-optin.css`) and is only ever referenced through a
-  `banner-{banner_id}-{type}.css` template that the plugin fills in at runtime — so no literal URL
-  pointed at it and it was never captured. Unstyled, it rendered as a full-width block. With the
-  tracking scripts stripped there is also nothing left for it to gate, so `build.js` drops the
-  banner, its "manage consent" tab and its config script.
+- **The cookie banner works, but consents to nothing.** Complianz builds its stylesheet URL at
+  runtime by substituting `{banner_id}` and `{type}` into a template that ships in the page. URL
+  rewriting mangled that template twice over — `new URL()` percent-encodes the braces, and the
+  `?v=39` query made the query-hash rule splice a suffix into the middle of the filename — so the
+  substitution resolved to nothing and the banner rendered unstyled as a full-width block.
+  `build.js` now restores the literal template, and `banner-1-optin.css` is captured, so the
+  banner behaves as it does in production. Accepting or denying still sets its cookie, but the
+  tracking it exists to gate is already stripped, so the choice has no effect either way.
 
 ## How it was captured
 
